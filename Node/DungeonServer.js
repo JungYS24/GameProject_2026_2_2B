@@ -102,21 +102,21 @@ app.post("/api/dungeon/action", (req, res) => {
         return success(res, 200, "ATTACK_RESOLVED", "서로 공격했습니다.", gameState());
     }
 
-    // 2. 보물 상자 열기 액션[cite: 7]
+    // 2. 보물 상자 열기 액션
     if (action === "OPEN_CHEST" && room.type === "TREASURE" && room.state === "ACTIVE") {
         room.state = "CLEARED";
         dungeonRun.runGold += room.rewardGold;
         return success(res, 200, "TREASURE_OPENED", "보물상자를 열었습니다.", gameState());
     }
 
-    // 3. 휴식/회복 액션[cite: 7]
+    // 3. 휴식/회복 액션
     if (action === "REST" && room.type === "HEAL" && room.state === "ACTIVE") {
         room.state = "CLEARED";
         player.hp = Math.min(player.maxHp, player.hp + 30);
         return success(res, 200, "PLAYER_HEALED", "체력을 회복했습니다.", gameState());
     }
 
-    // 4. 다음 방 이동 액션[cite: 7, 8]
+    // 4. 다음 방 이동 액션
     if (action === "NEXT_ROOM" && room.state === "CLEARED") {
         if (dungeonRun.currentRoomIndex >= dungeonRun.rooms.length - 1) {
             return failure(res, 409, "NO_NEXT_ROOM", "다음 방이 없습니다.");
@@ -124,7 +124,15 @@ app.post("/api/dungeon/action", (req, res) => {
 
         dungeonRun.currentRoomIndex += 1;
         currentRoom().state = "ACTIVE";
-        return success(res, 200, "DUNGEON_RETURNED", "다음 방으로 이동했습니다.", gameState());
+        return success(res, 200, "ROOM_ADVANCED", "다음 방으로 이동했습니다.", gameState());
+    }
+
+    if (action === "RETURN" && room.type === "EXIT" && room.state === "ACTIVE") {
+        player.gold += dungeonRun.runGold;
+        dungeonRun.runGold = 0;
+        dungeonRun.state = "RETURNED";
+
+        return success(res, 200, "DUNGEON_RETURNED", "탐험을 마치고 귀환했습니다.", gameState());
     }
 
     // 허용되지 않은 행동 처리
