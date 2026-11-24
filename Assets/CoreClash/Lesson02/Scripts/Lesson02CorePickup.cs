@@ -77,6 +77,6 @@ namespace CoreClash.Lesson02
                 item.enabled = IsAvailable;
             }
             GetComponent<Collider>().enabled = IsAvailable;
-        }
+        }           
     }
 }

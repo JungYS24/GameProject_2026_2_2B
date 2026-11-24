@@ -101,6 +101,8 @@ namespace CoreClash.Lesson02
 
             NetworkButtons buttons = default;
             buttons.Set((int)Lesson02Button.Attack, mouse != null && mouse.leftButton.isPressed);
+            buttons.Set((int)Lesson02Button.Fire, mouse != null && mouse.rightButton.isPressed);
+            buttons.Set((int)Lesson02Button.Reload, keyboard != null && keyboard.rKey.isPressed);
 
             input.Set(new Lesson02InputData
             {

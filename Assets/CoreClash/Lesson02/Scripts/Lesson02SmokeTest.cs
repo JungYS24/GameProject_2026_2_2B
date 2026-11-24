@@ -61,7 +61,7 @@ namespace CoreClash.Lesson02
             }
 
             if (local == attacker && target != null && target.Health > 75)
-                target.RequestDamage(25, Vector3.forward);
+                target.RequestDamage(25, Vector3.forward, attacker.Object.InputAuthority);
             yield return new WaitForSeconds(1f);
             bool melee = target != null && target.Health <= 75;
             bool runner = NetworkRunner.Instances.Any(item => item != null && item.IsRunning);

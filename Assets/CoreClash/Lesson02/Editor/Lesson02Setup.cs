@@ -41,6 +41,7 @@ namespace CoreClash.Lesson02.Editor
                 */
             };
         }
+        Relo
 
         public static void CreateContent()
         {
